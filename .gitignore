@@ -132,3 +132,4 @@ dmypy.json
 
 # Jetbrains Intellij IDEA
 .idea/
+/marketplace/images_test/
