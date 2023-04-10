@@ -84,3 +84,17 @@ class ProductTag(models.Model):
     class Meta:
         verbose_name_plural = _('product tags')
         verbose_name = _('product tag')
+
+
+class SaleItem(models.Model):
+    """Модель скидочного товара"""
+    title = models.CharField(max_length=200, verbose_name=_('product name'))
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name=_('price'))
+    salePrice = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name=_('sale price'))
+    dateFrom = models.DateField(verbose_name=_('date from'))
+    dateTo = models.DateField(verbose_name=_('date to'))
+    href = models.CharField(max_length=200, unique=True, default='', verbose_name=_('href'))
+
+    class Meta:
+        verbose_name_plural = _('sale items')
+        verbose_name = _('sale item')

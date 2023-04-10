@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app_products.models import Category, Product, Subcategory, ProductImage, ProductTag
+from app_products.models import Category, Product, Subcategory, ProductImage, ProductTag, SaleItem
 
 
 @admin.register(Category)
@@ -20,9 +20,14 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = 'id', 'product'
+    list_display = 'id', 'image'
 
 
 @admin.register(ProductTag)
 class ProductTagAdmin(admin.ModelAdmin):
     list_display = 'id', 'name'
+
+
+@admin.register(SaleItem)
+class SaleItemAdmin(admin.ModelAdmin):
+    list_display = 'id', 'title', 'price', 'salePrice'
