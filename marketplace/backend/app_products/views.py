@@ -1,15 +1,15 @@
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpRequest
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from app_products.models import Category, Product, Subcategory, SaleItem
-from app_products.serializers import CategorySerializer, ProductSerializer, SaleItemSerializer
+from app_products.models import Category, Product, Subcategory, SaleItem, ProductTag
+from app_products.serializers import CategorySerializer, ProductSerializer, SaleItemSerializer, ProductTagSerializer
 
 
 class CategoryListAPIView(ListModelMixin, GenericAPIView):
@@ -76,17 +76,46 @@ class ProductDetailAPIView(RetrieveModelMixin, UpdateModelMixin, DestroyModelMix
     def get(self, request: HttpRequest, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request: HttpRequest, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request: HttpRequest, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-
 
 class SaleItemListAPIView(ListModelMixin, GenericAPIView):
     """Представление списка скидочных товаров"""
     serializer_class = SaleItemSerializer
     queryset = SaleItem.objects.all()
+
+    def get(self, request: HttpRequest):
+        return self.list(request)
+
+class ProductTagListAPIView(ListModelMixin, GenericAPIView):
+    """Представление списка тэгов товаров"""
+    serializer_class = ProductTagSerializer
+    queryset = ProductTag.objects.all()
+
+    def get(self, request: HttpRequest):
+        return self.list(request)
+
+
+class BannerListAPIView(ListModelMixin, GenericAPIView):
+    """Представление баннера"""
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get(self, request: HttpRequest):
+        return self.list(request)
+
+
+class ProductsPopularAPIView(ListModelMixin, GenericAPIView):
+    """Представление для получения популярных товаров"""
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+
+    def get(self, request: HttpRequest):
+        return self.list(request)
+
+
+class ProductsLimitedAPIView(ListModelMixin, GenericAPIView):
+    """Представление для получения ограниченных товаров"""
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
     def get(self, request: HttpRequest):
         return self.list(request)

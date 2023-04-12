@@ -10,9 +10,9 @@ class SubcategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        return data
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -24,9 +24,9 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        return data
 
 
 class ProductTagSerializer(serializers.ModelSerializer):
@@ -36,9 +36,9 @@ class ProductTagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        return data
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -48,9 +48,10 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        return data
+
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -64,12 +65,12 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        repr['category'] = str(repr['category'])
-        repr['tags'] = [str(tag.name)for tag in instance.tags.all()]
-        repr['images'] = [str(image.image)for image in instance.images.all()]
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        data['category'] = str(data['category'])
+        data['tags'] = [str(tag.name) for tag in instance.tags.all()]
+        data['images'] = [str(image.image) for image in instance.images.all()]
+        return data
 
 
 class SaleItemSerializer(serializers.ModelSerializer):
@@ -80,6 +81,6 @@ class SaleItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        repr['id'] = str(repr['id'])
-        return repr
+        data = super().to_representation(instance)
+        data['id'] = str(data['id'])
+        return data

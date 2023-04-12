@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'frontend.apps.FrontendConfig',
     'app_products.apps.AppProductsConfig',
+    'app_profiles.apps.AppProfilesConfig',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
