@@ -16,18 +16,27 @@ var mix = {
                 return
             }
 
-            this.postData('/api/profile/', {
-                fullName: this.fullName,
-                avatar: this.avatar,
-                phone: this.phone,
-                email: this.email
+            const formData = new FormData()
+            formData.append('fullName', this.fullName)
+            formData.append('phone', this.phone)
+            formData.append('email', this.email)
+            formData.append('avatar', this.avatar)
+
+            this.postData('/api/profile/', formData, {
+                headers: {
+                    'X-CSRFToken': this.getCookie('csrftoken')
+                }
             }).then(data => {
+                this.fullName = data.FullName
+                this.avatar = data.avatar
+                this.phone = data.phone
+                this.email = data.email
                 alert('Успешно сохранено')
             }).catch(() => {
                 console.warn('Ошибка при обновлении профиля')
             })
         },
-        changePassword () {
+        changePassword() {
             if (
                 !this.passwordCurrent.trim().length ||
                 !this.password.trim().length ||
@@ -37,8 +46,18 @@ var mix = {
                 alert('В форме присутствуют незаполненные поля или пароли не совпадают')
                 return
             }
-            this.postData('/api/profile/password/').then(data => {
-               alert('Успешно сохранено')
+
+            const formData = new FormData()
+            formData.append('passwordCurrent', this.passwordCurrent)
+            formData.append('password', this.password)
+            formData.append('passwordReply', this.passwordReply)
+
+            this.postData('/api/profile/password/', formData, {
+                headers: {
+                    'X-CSRFToken': this.getCookie('csrftoken')
+                }
+            }).then(() => {
+                alert('Успешно сохранено')
                 this.passwordCurrent = ''
                 this.password = ''
                 this.passwordReply = ''
@@ -51,12 +70,14 @@ var mix = {
             const file = target.files?.[0] ?? null
             if (!file) return
 
-            this.postData('/api/profile/avatar/', file, {
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            this.postData('/api/profile/avatar/', formData, {
                 headers: {
-                    'Content-Type': file.type,
                     'X-CSRFToken': this.getCookie('csrftoken')
                 },
-            }).then((data) => {
+            }, 'multipart/form-data').then((data) => {
                 this.avatar = data.url
             }).catch(() => {
                 console.warn('Ошибка при обновлении изображения')

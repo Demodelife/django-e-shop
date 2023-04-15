@@ -1,6 +1,4 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.forms import PasswordInput
 from rest_framework import serializers
 from app_profiles.models import UserProfile
 
@@ -31,26 +29,19 @@ class UserProfilePasswordUpdateSerializer(serializers.ModelSerializer):
     Сериализатор обновления пароля пользователя
     """
     passwordCurrent = serializers.CharField(required=True, write_only=True)
-    password = serializers.CharField(required=True, write_only=True)
+    # password = serializers.CharField(required=True, write_only=True)
     passwordReply = serializers.CharField(required=True, write_only=True)
 
     class Meta:
         model = User
         fields = 'passwordCurrent', 'password', 'passwordReply'
 
-    # def validate(self, data):
-    #     # print(self.context)
-    #     user = self.context['request'].user
-    #
-    #     if not user.check_password(data.get('passwordCurrent')):
-    #         raise serializers.ValidationError('Incorrect old password')
-    #
-    #     if data.get('password') != data.get('passwordReply'):
-    #         raise serializers.ValidationError('New password and confirm password do not match')
-    #
-    #     return data
-    #
-    # def update(self, instance, validated_data):
-    #     instance.set_password(validated_data['password'])
-    #     instance.save()
-    #     return instance
+
+    def validate(self, data):
+        # print(self.context['request'])
+        user = self.context['request'].user
+
+        if not user.check_password(data.get('passwordCurrent')):
+            raise serializers.ValidationError('Incorrect old password')
+
+        return data

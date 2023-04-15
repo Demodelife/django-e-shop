@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, get_object_or_404, RetrieveAPIView, ListCreateAPIView, \
-    RetrieveUpdateAPIView, UpdateAPIView
+    RetrieveUpdateAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
@@ -16,55 +17,67 @@ from app_profiles.serializers import UserProfileSerializer, UserProfileAvatarUpd
     UserProfilePasswordUpdateSerializer
 
 
-# class UserProfileAPIView(APIView):
-#     """
-#     Представление для получения и обновления информации профиля
-#     """
-#     serializer_class = UserProfileSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def get(self, request, *args, **kwargs):
-#         profile = self.request.user.profile
-#         serializer = self.serializer_class(profile)
-#         return Response(serializer.data)
-#
-#     def post(self, request, *args, **kwargs):
-#         profile = self.request.user.profile
-#         serializer = self.serializer_class(profile, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class UserProfileAPIView(RetrieveUpdateAPIView):
+class UserProfileAPIView(APIView):
     """
     Представление для получения и обновления информации профиля
     """
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user.profile
+    def get(self, request, *args, **kwargs):
+        profile = self.request.user.profile
+        serializer = self.serializer_class(profile)
+        return Response(serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        profile = self.request.user.profile
+        serializer = self.serializer_class(profile, data=self.request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserProfileAvatarUpdateAPIView(RetrieveUpdateAPIView):
+# class UserProfilePasswordUpdateAPIView(RetrieveUpdateAPIView):
+#     """
+#     Представление для обновления пароля пользователя
+#     """
+#     serializer_class = UserProfilePasswordUpdateSerializer
+#     permission_classes = [IsAuthenticated]
+#
+#     def get_object(self):
+#         return self.request.user
+
+class UserProfilePasswordUpdateAPIView(APIView):
+    """
+    Представление для обновления пароля пользователя
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserProfilePasswordUpdateSerializer(
+            data=self.request.data,
+            context={'request': self.request}
+        )
+        if serializer.is_valid():
+            user = self.request.user
+            user.set_password(serializer.validated_data['password'])
+            user.save()
+            return Response({'detail': 'Password changed successfully'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileAvatarUpdateAPIView(APIView):
     """
     Представление для обновления аватара пользователя
     """
     serializer_class = UserProfileAvatarUpdateSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user.profile
-
-
-class UserProfilePasswordUpdateAPIView(RetrieveUpdateAPIView):
-    """
-    Представление для обновления пароля пользователя
-    """
-    serializer_class = UserProfilePasswordUpdateSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        return self.request.user
+    def post(self, request, *args, **kwargs):
+        profile = self.request.user.profile
+        serializer = self.serializer_class(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'detail': 'Avatar changed successfully'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
