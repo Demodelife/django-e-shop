@@ -22,6 +22,12 @@ def product_images_directory_path(instance: 'ProductImage', filename: str) -> st
         filename=filename,
     )
 
+def sale_item_images_directory_path(instance: 'SaleItemImage', filename: str) -> str:
+    return 'sale_items/sale_item_{pk}/images/{filename}'.format(
+        pk=instance.saleItem.pk,
+        filename=filename,
+    )
+
 
 class Category(models.Model):
     """Модель категории товара"""
@@ -98,3 +104,13 @@ class SaleItem(models.Model):
     class Meta:
         verbose_name_plural = _('sale items')
         verbose_name = _('sale item')
+
+
+class SaleItemImage(models.Model):
+    """Модель картинки скидочного товара"""
+    saleItem = models.ForeignKey(SaleItem, on_delete=models.CASCADE, related_name='images', verbose_name=_('product'))
+    image = models.ImageField(null=True, blank=True, upload_to=sale_item_images_directory_path, verbose_name=_('image'))
+
+    class Meta:
+        verbose_name_plural = _('sale item images')
+        verbose_name = _('sale item image')

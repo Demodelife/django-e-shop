@@ -1,7 +1,7 @@
 var mix = {
     methods: {
         getOrder(orderId) {
-            this.getData(`/api/orders/active`).then(data => {
+            this.getData(`/api/orders/active/`).then(data => {
                 this.orderId = data.orderId
                 this.createdAt = data.createdAt
                 this.fullName = data.fullName

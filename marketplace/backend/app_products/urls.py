@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 
 from app_products.views import (
@@ -6,8 +8,9 @@ from app_products.views import (
     ProductDetailAPIView,
     SaleItemListAPIView,
     ProductTagListAPIView,
-    BannerListAPIView,
-    ProductsPopularAPIView, ProductsLimitedAPIView
+    # BannerListAPIView,
+    ProductsPopularAPIView,
+    ProductsLimitedAPIView, BannerListAPIView
 )
 
 
@@ -26,6 +29,3 @@ urlpatterns = [
     path('tags/', ProductTagListAPIView.as_view(), name='tags'),
     path('banners/', BannerListAPIView.as_view(), name='banners'),
 ]
-
-
-

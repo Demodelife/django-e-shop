@@ -75,8 +75,8 @@
                   <strong class="ProductCard-tagsTitle">Tags:</strong>
 
                   <!-- Как добавить пробел между ссылками? -->
-                  <div v-for="(tag, index) in tags" >${ tag.name }$
-                    <span v-if="(index !== tags.length -1) && (tags.length !== 1)">|</span>
+                  <div v-for="(tag, index) in product.tags">${ tag.name }$
+                    <span v-if="(index !== product.tags.length -1) && (product.tags.length !== 1)">|</span>
                   </div>
 
                 </div>

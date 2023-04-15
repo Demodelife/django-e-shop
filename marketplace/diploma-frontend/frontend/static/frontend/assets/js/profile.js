@@ -10,19 +10,19 @@ var mix = {
                 console.warn('Ошибка при получении профиля')
             })
         },
-        changeProfile () {
-            if(!this.fullName.trim().length || !this.phone.trim().length || !this.email.trim().length) {
+        changeProfile() {
+            if (!this.fullName.trim().length || !this.phone.trim().length || !this.email.trim().length) {
                 alert('В форме присутствуют незаполненные поля')
                 return
             }
 
-            this.postData('/api/profile', {
+            this.postData('/api/profile/', {
                 fullName: this.fullName,
                 avatar: this.avatar,
                 phone: this.phone,
                 email: this.email
             }).then(data => {
-               alert('Успешно сохранено')
+                alert('Успешно сохранено')
             }).catch(() => {
                 console.warn('Ошибка при обновлении профиля')
             })
@@ -37,7 +37,7 @@ var mix = {
                 alert('В форме присутствуют незаполненные поля или пароли не совпадают')
                 return
             }
-            this.postData('/api/profile/password').then(data => {
+            this.postData('/api/profile/password/').then(data => {
                alert('Успешно сохранено')
                 this.passwordCurrent = ''
                 this.password = ''
@@ -46,20 +46,20 @@ var mix = {
                 console.warn('Ошибка при сохранении пароля')
             })
         },
-        setAvatar (event) {
+        setAvatar(event) {
             const target = event.target
             const file = target.files?.[0] ?? null
             if (!file) return
 
-            this.postData('/api/profile/avatar', file, {
+            this.postData('/api/profile/avatar/', file, {
                 headers: {
-                  'Content-Type': file.type,
-                  'X-CSRFToken': this.getCookie('csrftoken')
+                    'Content-Type': file.type,
+                    'X-CSRFToken': this.getCookie('csrftoken')
                 },
             }).then((data) => {
                 this.avatar = data.url
             }).catch(() => {
-                 console.warn('Ошибка при обновлении изображения')
+                console.warn('Ошибка при обновлении изображения')
             })
         },
         getCookie(name) {
