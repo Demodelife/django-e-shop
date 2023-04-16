@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from app_products.models import Category, Product, Subcategory, ProductImage, ProductTag, SaleItem, SaleItemImage
+from app_products.models import Category, Product, Subcategory, ProductImage, ProductTag, SaleItem, SaleItemImage, \
+    Specification, Review
 
 
 @admin.register(Category)
@@ -36,3 +37,13 @@ class SaleItemAdmin(admin.ModelAdmin):
 @admin.register(SaleItemImage)
 class SaleItemImageAdmin(admin.ModelAdmin):
     list_display = 'id', 'image'
+
+
+@admin.register(Specification)
+class SpecificationAdmin(admin.ModelAdmin):
+    list_display = 'id', 'product', 'name', 'value'\
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = 'id', 'product', 'rate', 'author'
