@@ -78,6 +78,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        # data['price'] = float(data['price'])
         data['id'] = str(data['id'])
         data['category'] = str(data['category'])
         # data['tags'] = [str(tag.name) for tag in instance.tags.all()]

@@ -19,7 +19,7 @@
     </div>
     <div class="Section">
       <div class="wrap">
-        <form class="form Cart" action="/api/order" method="post" @submit.prevent="submitBasket">
+        <form class="form Cart" action="/api/orders/" method="post" @submit.prevent="submitBasket">
           {% csrf_token %}
           <!-- Данные по товару в корзине -->
           <div v-for="product in Object.values(basket)" class="Cart-product">
@@ -41,16 +41,17 @@
               <div class="Cart-block Cart-block_amount">
                 <div class="Cart-amount">
                   <div class="Amount">
-                    <button class="Amount-remove" type="button" @click="removeFromBasket(product, 1)">
+                    <button class="Amount-remove" type="button" @click="removeFromBasket(product)">
                     </button>
                     <input class="Amount-input form-input" name="amount" type="text" :value="product.count"/>
                     <button class="Amount-add" type="button" @click="addToBasket(product)">
                     </button>
+
                   </div>
                 </div>
               </div>
               <div class="Cart-block Cart-block_delete">
-                <button class="Cart-delete" @click="removeFromBasket(product)">
+                <button class="Cart-delete" @click="removeFromBasket(product, product.count)">
                   <img src="/static/frontend/assets/img/icons/card/delete.svg"
                        alt="delete.svg"/>
                 </button>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'app_products.apps.AppProductsConfig',
     'app_profiles.apps.AppProfilesConfig',
+    'app_cart.apps.AppCartConfig',
     'drf_yasg',
     'frontend',
 ]
@@ -126,3 +127,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%d.%m.%Y %H:%M:%S',
 }
+
+CART_SESSION_ID = 'cart'
