@@ -1,8 +1,6 @@
 from rest_framework import serializers
 
-from app_cart.cart import Cart
-from app_products.models import Product
 
-
-
-
+class CartItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    count = serializers.IntegerField()

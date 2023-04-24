@@ -1,24 +1,29 @@
-from django.db.models import Q, Avg, Count
-from django.http import HttpRequest
-from django.shortcuts import render, get_object_or_404
-from rest_framework import status
-from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView, CreateAPIView
-from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from typing import Any
+from django.db.models import Q, Avg, Count, QuerySet
+from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from app_products.models import Category, Product, Subcategory, SaleItem, ProductTag, Review
+from app_products.models import (
+    Category,
+    Product,
+    SaleItem,
+    ProductTag,
+)
 from app_products.serializers import (
     CategorySerializer,
     ProductSerializer,
     SaleItemSerializer,
-    ProductTagSerializer, ReviewSerializer,
+    ProductTagSerializer,
+    ReviewSerializer,
 )
 
 
 class CustomPagination(PageNumberPagination):
+    """
+    Класс пагинации
+    """
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -26,12 +31,12 @@ class CustomPagination(PageNumberPagination):
 
 class CategoryListAPIView(ListAPIView):
     """
-    Представление списка категорий товара
+    Представление списка категорий товаров.
     """
     serializer_class = CategorySerializer
-    queryset = Category.objects.order_by('id').all()
+    queryset = Category.objects.order_by('id')
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
@@ -43,8 +48,22 @@ class ProductListAPIView(ListAPIView):
     pagination_class = CustomPagination
 
 
-    def get_queryset(self):
-        queryset = Product.objects.order_by('id').all()
+    def get_queryset(self) -> QuerySet[Product]:
+        queryset = (
+           Product.objects
+           .filter(available=True)
+           .select_related(
+               'category',
+               'sale_items',
+           )
+           .prefetch_related(
+               'reviews',
+               'tags',
+               'images',
+               'specifications',
+           )
+        )
+
         filters = dict()
         name = self.request.query_params.get('filter[name]')
         min_price = self.request.query_params.get('filter[minPrice]')
@@ -93,10 +112,10 @@ class ProductListAPIView(ListAPIView):
 
         return queryset
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
-    def get_paginated_response(self, data):
+    def get_paginated_response(self, data) -> Response:
         return Response({
             'items': data,
             'currentPage': 1,
@@ -110,78 +129,146 @@ class ProductDetailAPIView(RetrieveAPIView):
     Представление для получения детальной информации о товаре.
     """
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = (
+        Product.objects
+        .filter(available=True)
+        .select_related(
+            'category',
+            'sale_items',
+        )
+        .prefetch_related(
+            'reviews',
+            'tags',
+            'images',
+            'specifications',
+        )
+    )
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.retrieve(request, *args, **kwargs)
 
 
 class SaleItemListAPIView(ListAPIView):
     """
-    Представление списка скидочных товаров
+    Представление списка скидочных товаров.
     """
     serializer_class = SaleItemSerializer
-    queryset = SaleItem.objects.all()
+    queryset = (
+        SaleItem.objects
+        .select_related('product')
+        .prefetch_related('images')
+    )
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
 class ProductTagListAPIView(ListAPIView):
     """
-    Представление списка тэгов товаров
+    Представление списка тэгов товаров.
     """
     serializer_class = ProductTagSerializer
-    queryset = ProductTag.objects.all()
+    queryset = ProductTag.objects.order_by('id')
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
 class BannerListAPIView(ListAPIView):
     """
-    Представление баннера
+    Представление баннера.
     """
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = (
+        Product.objects
+        .filter(available=True)
+        .select_related(
+            'category',
+            'sale_items',
+        )
+        .prefetch_related(
+            'reviews',
+            'tags',
+            'images',
+            'specifications',
+        )
+        .order_by('price')
+    )[:3]
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
 class ProductsPopularAPIView(ListAPIView):
     """
-    Представление для получения популярных товаров
+    Представление для получения популярных товаров.
     """
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = (
+        Product.objects
+        .filter(available=True)
+        .select_related(
+            'category',
+            'sale_items',
+        )
+        .prefetch_related(
+            'reviews',
+            'tags',
+            'images',
+            'specifications',
+        )
+        .order_by('-rating')
+    )[:10]
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
 class ProductsLimitedAPIView(ListAPIView):
     """
-    Представление для получения ограниченных товаров
+    Представление для получения ограниченных товаров.
     """
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()[:3]
+    queryset = (
+        Product.objects
+        .filter(isLimited=True)
+        .select_related(
+            'category',
+            'sale_items',
+        )
+        .prefetch_related(
+            'reviews',
+            'tags',
+            'images',
+            'specifications',
+        )
+    )[:3]
 
-    def get(self, request: HttpRequest, *args, **kwargs):
+
+    def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
 
 class ProductReviewCreateAPIView(CreateAPIView):
     """
-    Представление для создания отзыва к товару
+    Представление для создания отзыва к товару.
     """
     serializer_class = ReviewSerializer
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer) -> None:
         serializer.save(product=self.get_product())
 
-    def get_product(self):
+    def get_product(self) -> Any:
         return get_object_or_404(Product, pk=self.kwargs['pk'])
 
-    def post(self, request: HttpRequest, *args, **kwargs):
+    def post(self, request: Request, *args, **kwargs) -> Response:
+        product = self.get_product()
+
+        if product.reviews.count() != 0:
+            product.rating = product.reviews.aggregate(Avg('rate'))['rate__avg']
+        else:
+            product.rating = self.request.data['rate']
+
+        product.save()
+
         return self.create(request)

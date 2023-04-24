@@ -1,28 +1,27 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from app_cart.cart import Cart
 from app_products.models import Product
 
 
-
-class CartAPIView(APIView):
+class CartAPIView(GenericAPIView):
     """
     Представление для работы с корзиной.
     """
 
-    def get(self, request):
+    def get(self, request: Request) -> Response:
         """
         Получить содержимое корзины.
         """
         cart = Cart(request)
         data = list(cart.cart.values())
-        # data = sorted(cart.cart.values(), key=lambda x: float(x['price']), reverse=True)
 
         return Response(data, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request: Request) -> Response:
         """
         Добавить товар в корзину.
         """
@@ -36,11 +35,10 @@ class CartAPIView(APIView):
 
         cart.add(product=product, count=count)
         data = list(cart.cart.values())
-        # data = sorted(cart.cart.values(), key=lambda x: float(x['price']), reverse=True)
 
         return Response(data, status=status.HTTP_200_OK)
 
-    def delete(self, request):
+    def delete(self, request: Request) -> Response:
         """
         Удалить товар из корзины.
         """
@@ -54,6 +52,5 @@ class CartAPIView(APIView):
 
         cart.remove(product=product, count=count)
         data = list(cart.cart.values())
-        # data = sorted(cart.cart.values(), key=lambda x: float(x['price']), reverse=True)
 
         return Response(data, status=status.HTTP_200_OK)

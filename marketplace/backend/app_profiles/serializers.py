@@ -10,7 +10,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('fullName', 'phone', 'avatar', 'email')
+        fields = (
+            'fullName',
+            'phone',
+            'avatar',
+            'email'
+        )
         read_only_fields = 'avatar',
 
 
@@ -34,7 +39,11 @@ class UserProfilePasswordUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = 'passwordCurrent', 'password', 'passwordReply'
+        fields = (
+            'passwordCurrent',
+            'password',
+            'passwordReply',
+        )
 
 
     def validate(self, data):

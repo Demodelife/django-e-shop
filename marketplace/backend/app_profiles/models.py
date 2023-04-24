@@ -21,3 +21,6 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name_plural = _('profiles')
         verbose_name = _('profile')
+
+    def __str__(self):
+        return f'User {self.fullName}'

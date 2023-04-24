@@ -1,41 +1,59 @@
 from time import strftime
-
 from rest_framework import serializers
-
-from app_products.models import Category, Product, Subcategory, ProductTag, ProductImage, SaleItem, SaleItemImage, \
-    Review
+from app_products.models import (
+    Category,
+    Product,
+    ProductTag,
+    ProductImage,
+    SaleItem,
+    SaleItemImage,
+    Review,
+)
 
 
 class SubcategorySerializer(serializers.ModelSerializer):
     """
-    Сериализатор подкатегории товара
+    Сериализатор подкатегории товаров
     """
 
     class Meta:
-        model = Subcategory
-        fields = 'id', 'title', 'image', 'href'
+        model = Category
+        fields = (
+            'id',
+            'title',
+            'image',
+            'href',
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['id'] = str(data['id'])
         data['image'] = {}
+
         return data
 
 
 class CategorySerializer(serializers.ModelSerializer):
     """
-    Сериализатор категории товара
+    Сериализатор категории товаров
     """
-    subcategories = SubcategorySerializer(many=True, read_only=True)
+    subcategories = SubcategorySerializer(many=True)
 
     class Meta:
         model = Category
-        fields = 'id', 'title', 'image', 'href', 'subcategories'
+        fields = (
+            'id',
+            'title',
+            'image',
+            'href',
+            'subcategories',
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['id'] = str(data['id'])
         data['image'] = {}
+
         return data
 
 
@@ -46,21 +64,15 @@ class ProductTagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductTag
-        fields = 'id', 'name'
-
-
-class ProductImageSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор картинки товара
-    """
-
-    class Meta:
-        model = ProductImage
-        fields = '__all__'
+        fields = (
+            'id',
+            'name'
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['id'] = str(data['id'])
+
         return data
 
 
@@ -71,19 +83,38 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     tags = ProductTagSerializer(many=True, read_only=True)
 
-
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = (
+            'id',
+            'category',
+            'price',
+            'count',
+            'date',
+            'title',
+            'description',
+            'href',
+            'freeDelivery',
+            'images',
+            'tags',
+            'reviews',
+            'rating',
+        )
+
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # data['price'] = float(data['price'])
+
         data['id'] = str(data['id'])
         data['category'] = str(data['category'])
-        # data['tags'] = [str(tag.name) for tag in instance.tags.all()]
         data['images'] = [str(image.image.url) for image in instance.images.all()]
-        data['specifications'] = [{'name': spec.name, 'value': spec.value} for spec in instance.specifications.all()]
+        data['specifications'] = [
+            {
+                'name': spec.name,
+                'value': spec.value
+            }
+            for spec in instance.specifications.all()
+        ]
         data['reviews'] = [
             {
             'author': rev.author,
@@ -105,7 +136,10 @@ class SaleItemImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SaleItemImage
-        fields = '__all__'
+        fields = (
+            'id',
+            'image',
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -121,18 +155,34 @@ class SaleItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SaleItem
-        fields = '__all__'
+        fields = (
+            'id',
+            'salePrice',
+            'dateFrom',
+            'dateTo',
+            'href',
+            'images',
+        )
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['id'] = str(data['id'])
+        data['price'] = instance.product.price
+        data['title'] = instance.product.title
         data['images'] = [str(image.image.url) for image in instance.images.all()]
         return data
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    """Сериализатор отзыва к товару"""
+    """
+    Сериализатор отзыва к товару
+    """
 
     class Meta:
         model = Review
-        fields = 'author', 'email', 'text', 'rate'
+        fields = (
+            'author',
+            'email',
+            'text',
+            'rate',
+        )

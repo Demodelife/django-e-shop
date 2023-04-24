@@ -35,12 +35,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'frontend',
     'rest_framework',
     'app_products.apps.AppProductsConfig',
     'app_profiles.apps.AppProfilesConfig',
     'app_cart.apps.AppCartConfig',
+    'app_orders.apps.AppOrdersConfig',
     'drf_yasg',
-    'frontend',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -129,3 +132,7 @@ REST_FRAMEWORK = {
 }
 
 CART_SESSION_ID = 'cart'
+
+INTERNAL_IPS = [
+    '127.0.0.1'
+]

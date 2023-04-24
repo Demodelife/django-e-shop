@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200, verbose_name='subcategory name')),
                 ('description', models.TextField(blank=True, verbose_name='description')),
-                ('image', models.ImageField(blank=True, null=True, upload_to=app_products.models.subcategory_image_directory_path, verbose_name='image')),
+                ('image', models.ImageField(blank=True, null=True, upload_to=app_products.models.category_image_directory_path, verbose_name='image')),
                 ('href', models.SlugField(default='', unique=True)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subcategories', to='app_products.category', verbose_name='category')),
             ],
