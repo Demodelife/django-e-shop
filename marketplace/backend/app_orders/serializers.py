@@ -35,7 +35,7 @@ class OrderSerializer(serializers.ModelSerializer):
                 'count': op.count,
                 'date': op.product.date.strftime('%d.%m.%Y %H:%M:%S'),
                 'title': op.product.title,
-                'description': op.product.description,
+                'description': op.product.fullDescription[:100],
                 'href': op.product.href,
                 'freeDelivery': op.product.freeDelivery,
                 'images': [str(image.image.url) for image in op.product.images.all()],

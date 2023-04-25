@@ -52,7 +52,7 @@ class Category(models.Model):
 class Product(models.Model):
     """Модель товара"""
     title = models.CharField(max_length=200, verbose_name=_('product name'))
-    description = models.TextField(blank=True, verbose_name=_('description'))
+    fullDescription = models.TextField(blank=True, verbose_name=_('full description'))
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name=_('price'))
     count = models.PositiveSmallIntegerField(default=1, verbose_name=_('quantity'))
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products', verbose_name=_('category'))

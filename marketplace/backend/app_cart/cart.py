@@ -33,7 +33,7 @@ class Cart(object):
                 "category": product.category.pk,
                 "date": str(product.date),
                 "title": product.title,
-                "description": product.description,
+                "description": product.fullDescription[:90] + '...',
                 "href": product.href,
                 "freeDelivery": product.freeDelivery,
                 "reviews": len(product.reviews.all()),

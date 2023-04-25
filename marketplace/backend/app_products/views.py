@@ -19,16 +19,6 @@ from app_products.serializers import (
     ReviewSerializer,
 )
 
-
-class CustomPagination(PageNumberPagination):
-    """
-    Класс пагинации
-    """
-    page_size = 10
-    page_size_query_param = 'page_size'
-    max_page_size = 100
-
-
 class CategoryListAPIView(ListAPIView):
     """
     Представление списка категорий товаров.
@@ -40,7 +30,25 @@ class CategoryListAPIView(ListAPIView):
         return self.list(request)
 
 
-class ProductListAPIView(ListAPIView):
+class CustomPagination(PageNumberPagination):
+    """
+    Класс пагинации
+    """
+    page_size = 8
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+    def get_paginated_response(self, data) -> Response:
+        page_amount = -(-self.page.paginator.count // self.page_size)
+
+        return Response({
+            'items': data,
+            'currentPage': self.page.number,
+            'lastPage': page_amount
+        })
+
+
+class CatalogBaseListAPIView(ListAPIView):
     """
     Представление списка товаров
     """
@@ -51,7 +59,6 @@ class ProductListAPIView(ListAPIView):
     def get_queryset(self) -> QuerySet[Product]:
         queryset = (
            Product.objects
-           .filter(available=True)
            .select_related(
                'category',
                'sale_items',
@@ -78,16 +85,16 @@ class ProductListAPIView(ListAPIView):
             free_delivery = False
 
         if available == 'true':
-            available = 1
+            available = True
         else:
-            available = 0
+            available = False
 
         filters.update({
             'title__icontains': name,
             'price__gte': min_price,
             'price__lte': max_price,
             'freeDelivery': free_delivery,
-            'count__gte': available,
+            'available': available,
             'tags': tags
         })
 
@@ -115,12 +122,21 @@ class ProductListAPIView(ListAPIView):
     def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
 
-    def get_paginated_response(self, data) -> Response:
-        return Response({
-            'items': data,
-            'currentPage': 1,
-            'lastPage': 1
-        })
+
+
+class CatalogCategoryListAPIView(CatalogBaseListAPIView):
+    """
+    Представление списка товаров под категориями
+    """
+    serializer_class = ProductSerializer
+    pagination_class = CustomPagination
+
+    def get_queryset(self) -> QuerySet[Product]:
+        return super().get_queryset().filter(category_id=self.kwargs.get('pk'))
+
+
+    def get(self, request: Request, *args, **kwargs) -> Response:
+        return self.list(request)
 
 
 
@@ -218,7 +234,7 @@ class ProductsPopularAPIView(ListAPIView):
             'specifications',
         )
         .order_by('-rating')
-    )[:10]
+    )[:8]
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         return self.list(request)
@@ -231,7 +247,7 @@ class ProductsLimitedAPIView(ListAPIView):
     serializer_class = ProductSerializer
     queryset = (
         Product.objects
-        .filter(isLimited=True)
+        .filter(available=True, isLimited=True)
         .select_related(
             'category',
             'sale_items',

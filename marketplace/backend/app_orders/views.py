@@ -145,9 +145,15 @@ class PaymentAPIView(GenericAPIView):
                     year=serializer.validated_data['year'],
                 )
 
-                if 0 < product.product.count >= product.count:
+                if product.product.count >= product.count:
                     product.product.count -= product.count
-                    product.product.save()
+                    if not product.product.count:
+                        product.product.available = False
+                else:
+                    product.product.count = 0
+                    product.product.available = False
+
+                product.product.save()
 
             order.status = 'paid'
             order.save()

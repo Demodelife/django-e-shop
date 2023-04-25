@@ -4,7 +4,6 @@ from app_products.models import (
     Category,
     Product,
     ProductTag,
-    ProductImage,
     SaleItem,
     SaleItemImage,
     Review,
@@ -92,7 +91,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'count',
             'date',
             'title',
-            'description',
+            'fullDescription',
             'href',
             'freeDelivery',
             'images',
@@ -107,6 +106,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
         data['id'] = str(data['id'])
         data['category'] = str(data['category'])
+        data['description'] = instance.fullDescription[:150] + '...'
         data['images'] = [str(image.image.url) for image in instance.images.all()]
         data['specifications'] = [
             {

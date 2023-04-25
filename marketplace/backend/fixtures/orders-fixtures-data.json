@@ -1,0 +1,291 @@
+[
+  {
+    "model": "app_orders.order",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "createdAt": "2023-04-25T16:55:22.375Z",
+      "fullName": "Bruce Willis",
+      "email": "brucy@email.com",
+      "phone": "+11111111111",
+      "deliveryType": "ordinary",
+      "paymentType": "online",
+      "totalCost": "5218.75",
+      "status": "paid",
+      "city": "LA",
+      "address": "Any street"
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "createdAt": "2023-04-25T16:56:42.996Z",
+      "fullName": "Bruce Willis",
+      "email": "brucy@email.com",
+      "phone": "+11111111111",
+      "deliveryType": "express",
+      "paymentType": "online",
+      "totalCost": "1839.36",
+      "status": "paid",
+      "city": "LA",
+      "address": "Any"
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "createdAt": "2023-04-25T16:59:11.522Z",
+      "fullName": "Arnold Schwarzenegger",
+      "email": "arny@email.com",
+      "phone": "+22222222222",
+      "deliveryType": "express",
+      "paymentType": "online",
+      "totalCost": "6008.59",
+      "status": "paid",
+      "city": "Washington",
+      "address": "Any 1/1"
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "createdAt": "2023-04-25T17:00:56.755Z",
+      "fullName": "Arnold Schwarzenegger",
+      "email": "arny@email.com",
+      "phone": "+22222222222",
+      "deliveryType": "express",
+      "paymentType": "someone",
+      "totalCost": "3065.48",
+      "status": "waiting for payment",
+      "city": "Washington",
+      "address": "Any 1/1"
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 5,
+    "fields": {
+      "user": 2,
+      "createdAt": "2023-04-25T17:01:36.519Z",
+      "fullName": "",
+      "email": "",
+      "phone": "",
+      "deliveryType": "",
+      "paymentType": "",
+      "totalCost": "0.00",
+      "status": "accepted",
+      "city": "",
+      "address": ""
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 6,
+    "fields": {
+      "user": 4,
+      "createdAt": "2023-04-25T17:03:10.275Z",
+      "fullName": "Jodie Foster",
+      "email": "jojo@email.com",
+      "phone": "+44444444444",
+      "deliveryType": "",
+      "paymentType": "online",
+      "totalCost": "5738.82",
+      "status": "paid",
+      "city": "LA",
+      "address": "Any 4/4"
+    }
+  },
+  {
+    "model": "app_orders.order",
+    "pk": 7,
+    "fields": {
+      "user": 4,
+      "createdAt": "2023-04-25T17:07:03.363Z",
+      "fullName": "Jodie Foster",
+      "email": "jojo@email.com",
+      "phone": "+44444444444",
+      "deliveryType": "express",
+      "paymentType": "online",
+      "totalCost": "1716.50",
+      "status": "paid",
+      "city": "LA",
+      "address": "Any 4/4"
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "product": 10,
+      "price": "2574.99",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 2,
+    "fields": {
+      "order": 1,
+      "product": 22,
+      "price": "1441.85",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 3,
+    "fields": {
+      "order": 1,
+      "product": 26,
+      "price": "1201.91",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 4,
+    "fields": {
+      "order": 2,
+      "product": 3,
+      "price": "1839.36",
+      "count": 3
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 5,
+    "fields": {
+      "order": 3,
+      "product": 2,
+      "price": "4046.61",
+      "count": 3
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 6,
+    "fields": {
+      "order": 3,
+      "product": 7,
+      "price": "1961.98",
+      "count": 2
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 7,
+    "fields": {
+      "order": 4,
+      "product": 8,
+      "price": "3065.48",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 8,
+    "fields": {
+      "order": 5,
+      "product": 8,
+      "price": "3065.48",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 9,
+    "fields": {
+      "order": 6,
+      "product": 2,
+      "price": "2697.74",
+      "count": 2
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 10,
+    "fields": {
+      "order": 6,
+      "product": 19,
+      "price": "3041.08",
+      "count": 1
+    }
+  },
+  {
+    "model": "app_orders.orderproduct",
+    "pk": 11,
+    "fields": {
+      "order": 7,
+      "product": 5,
+      "price": "1716.50",
+      "count": 2
+    }
+  },
+  {
+    "model": "app_orders.payment",
+    "pk": 1,
+    "fields": {
+      "order": 1,
+      "name": "Bruce Willis",
+      "card": "1111111111111",
+      "code": "123",
+      "month": "01",
+      "year": "24"
+    }
+  },
+  {
+    "model": "app_orders.payment",
+    "pk": 2,
+    "fields": {
+      "order": 2,
+      "name": "Bruce Willis",
+      "card": "11111111111",
+      "code": "123",
+      "month": "11",
+      "year": "24"
+    }
+  },
+  {
+    "model": "app_orders.payment",
+    "pk": 3,
+    "fields": {
+      "order": 3,
+      "name": "Arnold Schwarzenegger",
+      "card": "2222222222222",
+      "code": "123",
+      "month": "05",
+      "year": "25"
+    }
+  },
+  {
+    "model": "app_orders.payment",
+    "pk": 4,
+    "fields": {
+      "order": 6,
+      "name": "Jodie Foster",
+      "card": "444444444444444",
+      "code": "123",
+      "month": "12",
+      "year": "26"
+    }
+  },
+  {
+    "model": "app_orders.payment",
+    "pk": 5,
+    "fields": {
+      "order": 7,
+      "name": "Jodie Foster",
+      "card": "4444444444444",
+      "code": "123",
+      "month": "12",
+      "year": "23"
+    }
+  }
+]
