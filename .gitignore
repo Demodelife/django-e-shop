@@ -132,3 +132,4 @@ dmypy.json
 
 # Jetbrains Intellij IDEA
 .idea/
+/shop/images_test/
