@@ -19,6 +19,7 @@ from app_products.serializers import (
     ReviewSerializer,
 )
 
+
 class CategoryListAPIView(ListAPIView):
     """
     Представление списка категорий товаров.

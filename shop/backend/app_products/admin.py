@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from app_products.models import (
     Category,
     Product,
@@ -33,6 +32,7 @@ class ProductAdmin(admin.ModelAdmin):
         if len(obj.fullDescription) < 50:
             return obj.fullDescription
         return obj.fullDescription[:50] + "..."
+
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):

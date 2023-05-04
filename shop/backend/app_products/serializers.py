@@ -1,4 +1,3 @@
-from time import strftime
 from rest_framework import serializers
 from app_products.models import (
     Category,
