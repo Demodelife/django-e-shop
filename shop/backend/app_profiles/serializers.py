@@ -34,7 +34,6 @@ class UserProfilePasswordUpdateSerializer(serializers.ModelSerializer):
     Сериализатор обновления пароля пользователя
     """
     passwordCurrent = serializers.CharField(required=True, write_only=True)
-    # password = serializers.CharField(required=True, write_only=True)
     passwordReply = serializers.CharField(required=True, write_only=True)
 
     class Meta:
@@ -47,7 +46,6 @@ class UserProfilePasswordUpdateSerializer(serializers.ModelSerializer):
 
 
     def validate(self, data):
-        # print(self.context['request'])
         user = self.context['request'].user
 
         if not user.check_password(data.get('passwordCurrent')):
